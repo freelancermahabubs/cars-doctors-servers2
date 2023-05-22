@@ -63,7 +63,13 @@ async function run() {
       res.send({ token });
     });
     app.get("/carsServices", async (req, res) => {
-      const cursor = carsServicesCollection.find();
+      const sort = req.query.sort;
+      // const query = {};
+      const query = { price: { $gte: 100 } };
+      const options = {
+        sort: { price: sort === "asc" ? 1 : -1 },
+      };
+      const cursor = carsServicesCollection.find(query, options);
       const result = await cursor.toArray();
       res.send(result);
     });
