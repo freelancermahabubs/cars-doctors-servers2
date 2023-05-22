@@ -64,12 +64,20 @@ async function run() {
     });
     app.get("/carsServices", async (req, res) => {
       const sort = req.query.sort;
+      const search = req.query.search;
       // const query = {};
-      const query = { price: { $gte: 100 } };
+      // const query = { price: { $gte: 50, $lte: 150 } };
+
+      const query = { title: { $regex: search, $options: "i" } };
       const options = {
         sort: { price: sort === "asc" ? 1 : -1 },
       };
-      const cursor = carsServicesCollection.find(query, options);
+      const cursor = carsServicesCollection.find(
+        query,
+
+        options,
+        search
+      );
       const result = await cursor.toArray();
       res.send(result);
     });
